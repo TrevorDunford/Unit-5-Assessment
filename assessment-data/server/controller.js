@@ -16,15 +16,15 @@ module.exports = {
             drop table if exists countries;
 
             create table countries (
-                country_id serial primary key; 
-                name varchar;
+                country_id serial primary key,
+                name varchar
             );
 
             CREATE TABLE cities (
-                city_id SERIAL PRIMARY KEY;
-                name varchar;
-                rating interger;
-                country_id interger;
+                city_id SERIAL PRIMARY KEY,
+                name varchar,
+                rating integer,
+                country_id integer references countries(country_id)
             );
 
             insert into countries (name)
@@ -232,26 +232,20 @@ module.exports = {
         sequelize.query(`SELECT country_id, name FROM countries;`)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
-            console.log('DB seeded!')
-            res.sendStatus(200)
         }).catch(err => console.log('error seeding DB', err))
 
 },
     createCity:(req, res) => {
-        sequelize.query(`INSERT INTO table_countries VALUES (name, rating, countryId);`)
+        sequelize.query(`INSERT INTO cities (name, rating, country_id) VALUES (varchar, integer, integer)`)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
-            console.log('DB seeded!')
-            res.sendStatus(200)
         }).catch(err => console.log('error seeding DB', err))
 
     },
     getCities:(req, res) => {
-        sequelize.query(`SELECT city_id, cities.name AS city_name, countries.name AS country_name, rating FROM cities INNER JOIN countries ON countries.country_id = cities.country_id WHERE country_id = cities_id`)
+        sequelize.query(`SELECT city_id, cities.name AS city, countries_id, countries.name AS country, rating FROM cities INNER JOIN countries ON countries.country_id = cities.country_id WHERE country_id = cities_id`)
         .then((dbRes) => {
             res.status(200).send(dbRes[0])
-            console.log('DB seeded!')
-            res.sendStatus(200)
         }).catch(err => console.log('error seeding DB', err))
 
     },
@@ -264,7 +258,6 @@ module.exports = {
             res.sendStatus(200)
         }).catch(err => console.log('error seeding DB', err))
 
-        'select * from cities'
 
     }
 }
